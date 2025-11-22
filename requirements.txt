@@ -1,0 +1,6 @@
+requests
+kafka-python
+duckdb
+quixstreams
+redis
+pandas
