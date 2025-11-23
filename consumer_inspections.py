@@ -15,6 +15,7 @@ try:
 
     # Create table if it does not exist
     conn.execute("""
+        DROP TABLE IF EXISTS inspections;
         CREATE TABLE IF NOT EXISTS inspections (
             camis TEXT,
             dba TEXT,
@@ -33,7 +34,8 @@ try:
             violation_description TEXT,
             inspection_type TEXT,
             latitude DOUBLE,
-            longitude DOUBLE
+            longitude DOUBLE,
+            bbl BIGINT
         )
     """)
 
@@ -73,7 +75,8 @@ def flush_to_duckdb():
                 json_extract_string(j.value, '$.violation_description'),
                 json_extract_string(j.value, '$.inspection_type'),
                 json_extract(j.value, '$.latitude')::DOUBLE,
-                json_extract(j.value, '$.longitude')::DOUBLE
+                json_extract(j.value, '$.longitude')::DOUBLE,
+                json_extract(j.value, '$.bbl')::BIGINT    
             FROM json_each(?) AS j
         """, [json.dumps(buffer)])
 

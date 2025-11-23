@@ -7,7 +7,7 @@ NYC_API_URL = "https://data.cityofnewyork.us/resource/43nn-pn8j.json"
 
 def produce_to_kafka():
     offset = 0
-    max_events = 20000 # Set a maximum of events for testing, make higher when everything works -> 100,000
+    max_events = 100000 # Set a maximum of events for testing, make higher when everything works -> 100,000
     limit = 1000 
     total_produced = 0
 
