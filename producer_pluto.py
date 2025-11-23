@@ -8,7 +8,7 @@ import logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    filename='inspection.log',
+    filename='pluto_p.log',
 )
 
 NYC_PLUTO_URL = "https://data.cityofnewyork.us/resource/64uk-42ks.json"

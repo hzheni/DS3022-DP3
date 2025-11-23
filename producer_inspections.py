@@ -10,7 +10,7 @@ NYC_API_URL = "https://data.cityofnewyork.us/resource/43nn-pn8j.json"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    filename='inspection.log',
+    filename='inspection_p.log',
 )
 
 def produce_to_kafka():
