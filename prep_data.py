@@ -20,14 +20,14 @@ def main():
 
         # Remove duplicates from inspections table
         conn.execute("""
-            CREATE OR REPLACE TABLE inspections_dedup AS
+            CREATE OR REPLACE TABLE inspections AS
             SELECT DISTINCT * FROM inspections;
         """)
         logging.info("Removed duplicates from inspections table.")
 
         # Remove duplicates from pluto table
         conn.execute("""
-            CREATE OR REPLACE TABLE pluto_dedup AS
+            CREATE OR REPLACE TABLE pluto AS
             SELECT DISTINCT * FROM pluto;
         """)
         logging.info("Removed duplicates from pluto table.")
@@ -39,6 +39,8 @@ def main():
             CREATE OR REPLACE TABLE {OUTPUT_TABLE} AS
             SELECT
                 i.*,
+                p.borough,
+                p.zipcode,
                 p.assesstot,
                 p.yearbuilt,
                 p.sanitboro,
@@ -46,12 +48,22 @@ def main():
                 p.comarea,
                 p.retailarea,
                 p.unitstotal
-            FROM inspections_dedup i
-            LEFT JOIN pluto_dedup p
-            ON CAST(i.bbl AS BIGINT) = CAST(p.bbl AS BIGINT);
+            FROM inspections i
+            INNER JOIN pluto p USING (bbl)
+            WHERE p.assesstot IS NOT NULL;
         """)
         logging.info(f"Joined table created: {OUTPUT_TABLE}")
         print(f"Joined table created: {OUTPUT_TABLE}")
+
+        # Keep unique dba (restaurant name) entries based on newest inspection date
+        conn.execute(f"""
+            CREATE OR REPLACE TABLE nyc_joined AS
+            SELECT DISTINCT ON (dba)
+                *
+            FROM {OUTPUT_TABLE};
+        """)
+        logging.info("Filtered joined table to keep unique dba entries based on newest inspection date.")
+        print("Filtered joined table to keep unique dba entries based on newest inspection date.")
 
         # Check a few rows
         logging.info("Preview of joined table:")

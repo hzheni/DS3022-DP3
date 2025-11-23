@@ -1,9 +1,17 @@
 from quixstreams import Application
 import duckdb
 import json
+import logging
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    filename='inspection.log',
+)
 
 BATCH_SIZE = 10000
-PRINT_EVERY = 5000
+PRINT_EVERY = 10000
 DUCKDB_FILE = "inspections.duckdb"
 
 buffer = [] # temporarily store messages before batch insert
@@ -20,10 +28,7 @@ try:
             camis TEXT,
             dba TEXT,
             boro TEXT,
-            building TEXT,
-            street TEXT,
             zipcode TEXT,
-            phone TEXT,
             cuisine_description TEXT,
             inspection_date DATE,
             critical_flag TEXT,
@@ -33,13 +38,12 @@ try:
             violation_code TEXT,
             violation_description TEXT,
             inspection_type TEXT,
-            latitude DOUBLE,
-            longitude DOUBLE,
             bbl BIGINT
         )
     """)
 
     print("Connected to DuckDB and ensured table exists.")
+    logging.info("Connected to DuckDB and ensured table exists.")
 
 except Exception as e:
     print("Failed to connect to DuckDB or create table:", e)
@@ -61,10 +65,7 @@ def flush_to_duckdb():
                 json_extract_string(j.value, '$.camis'),
                 json_extract_string(j.value, '$.dba'),
                 json_extract_string(j.value, '$.boro'),
-                json_extract_string(j.value, '$.building'),
-                json_extract_string(j.value, '$.street'),
                 json_extract_string(j.value, '$.zipcode'),
-                json_extract_string(j.value, '$.phone'),
                 json_extract_string(j.value, '$.cuisine_description'),
                 json_extract(j.value, '$.inspection_date')::DATE,
                 json_extract_string(j.value, '$.critical_flag'),
@@ -74,13 +75,12 @@ def flush_to_duckdb():
                 json_extract_string(j.value, '$.violation_code'),
                 json_extract_string(j.value, '$.violation_description'),
                 json_extract_string(j.value, '$.inspection_type'),
-                json_extract(j.value, '$.latitude')::DOUBLE,
-                json_extract(j.value, '$.longitude')::DOUBLE,
                 json_extract(j.value, '$.bbl')::BIGINT    
             FROM json_each(?) AS j
         """, [json.dumps(buffer)])
 
         print(f"Inserted batch of {len(buffer)} records into DuckDB.")
+        logging.info(f"Inserted batch of {len(buffer)} records into DuckDB.")
 
     except Exception as e:
         print("Error inserting into DuckDB:", e)
@@ -97,12 +97,14 @@ app = Application(
 )
 # Define topic
 topic = app.topic("nyc_inspections", value_deserializer="json")
+logging.info("Kafka consumer application and topic created.")
 
 
 # Start consuming messages
 with app.get_consumer() as consumer:
     consumer.subscribe(["nyc_inspections"])
     print("Consumer started... waiting for messages.")
+    logging.info("Consumer started... waiting for messages.")
 
     # Consume messages in a loop
     try:
@@ -139,6 +141,7 @@ with app.get_consumer() as consumer:
             # Progress output
             if total_consumed % PRINT_EVERY == 0:
                 print(f"Consumed {total_consumed} messages so far...")
+                logging.info(f"Consumed {total_consumed} messages so far...")
 
             # If batch full, flush
             if len(buffer) >= BATCH_SIZE:

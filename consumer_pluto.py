@@ -1,6 +1,14 @@
 from quixstreams import Application
 import duckdb
 import json
+import logging
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    filename='inspection.log',
+)
 
 BATCH_SIZE = 10000
 PRINT_EVERY = 5000
@@ -22,8 +30,6 @@ try:
                 address TEXT,
                 zipcode TEXT,
                 borough TEXT,
-                latitude DOUBLE,
-                longitude DOUBLE,
 
                 assesstot DOUBLE,
                 yearbuilt INTEGER,
@@ -35,6 +41,7 @@ try:
                 bbl BIGINT); """)
 
     print("Connected to DuckDB and ensured table exists.")
+    logging.info("Connected to DuckDB and ensured table exists.")
 
 except Exception as e:
     print("Failed to connect to DuckDB or create table:", e)
@@ -56,8 +63,6 @@ def flush_to_duckdb():
                     json_extract_string(j.value, '$.address'),
                     json_extract_string(j.value, '$.zipcode'),
                     json_extract_string(j.value, '$.borough'),
-                    json_extract(j.value, '$.latitude')::DOUBLE,
-                    json_extract(j.value, '$.longitude')::DOUBLE,
                     json_extract(j.value, '$.assesstot')::DOUBLE,
                     json_extract(j.value, '$.yearbuilt')::INT,
                     json_extract(j.value, '$.sanitboro')::INT,
@@ -69,6 +74,7 @@ def flush_to_duckdb():
                     FROM json_each(?) AS j;""", [json.dumps(buffer)])
 
         print(f"Inserted batch of {len(buffer)} records into DuckDB.")
+        logging.info(f"Inserted batch of {len(buffer)} records into DuckDB.")
 
     except Exception as e:
         print("Error inserting into DuckDB:", e)
@@ -91,6 +97,7 @@ topic = app.topic("nyc_pluto", value_deserializer="json")
 with app.get_consumer() as consumer:
     consumer.subscribe(["nyc_pluto"])
     print("Consumer started... waiting for messages.")
+    logging.info("Kafka consumer application and topic created.")
 
     # Consume messages in a loop
     try:
@@ -127,6 +134,7 @@ with app.get_consumer() as consumer:
             # Progress output
             if total_consumed % PRINT_EVERY == 0:
                 print(f"Consumed {total_consumed} messages so far...")
+                logging.info(f"Consumed {total_consumed} messages so far...")
 
             # If batch full, flush
             if len(buffer) >= BATCH_SIZE:

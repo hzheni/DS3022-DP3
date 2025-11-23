@@ -2,13 +2,21 @@ from quixstreams import Application
 import json
 import requests
 import time
+import logging
 
 NYC_API_URL = "https://data.cityofnewyork.us/resource/43nn-pn8j.json"
 
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    filename='inspection.log',
+)
+
 def produce_to_kafka():
     offset = 0
-    max_events = 100000 # Set a maximum of events for testing, make higher when everything works -> 100,000
-    limit = 1000 
+    max_events = 500000 # Set a maximum of events for testing, make higher when everything works -> 400000
+    limit = 5000 
     total_produced = 0
 
     # Create the Application and producer once
@@ -59,7 +67,9 @@ def produce_to_kafka():
             offset += len(data)
 
             # Print total produced so far
-            print(f"Total records produced so far: {total_produced}")
+            if total_produced % 10000 == 0:
+                print(f"Total records produced so far: {total_produced}")
+                logging.info(f"Total records produced so far: {total_produced}")
 
             # Sleep to avoid hitting API limits
             time.sleep(1)
