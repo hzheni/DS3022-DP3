@@ -4,3 +4,6 @@ duckdb
 quixstreams
 redis
 pandas
+matplotlib
+seaborn
+numpy
