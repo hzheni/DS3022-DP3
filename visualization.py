@@ -38,13 +38,13 @@ class InsightGenerator:
         """loading all analysis results"""
       
         try:
-            self.cuisine_df = pd.read_csv('cuisine_analysis.csv')
-            self.borough_df = pd.read_csv('borough_analysis.csv')
-            self.temporal_df = pd.read_csv('temporal_trends.csv')
-            self.anomalies_df = pd.read_csv('anomalies_detected.csv')
-            self.property_df = pd.read_csv('property_value_analysis.csv')
-            self.violations_df = pd.read_csv('violation_frequency.csv')
-            self.analysis_df = pd.read_csv('analysis_data.csv')
+            self.cuisine_df = pd.read_csv(os.path.join('analysis_tables', 'cuisine_analysis.csv'))
+            self.borough_df = pd.read_csv(os.path.join('analysis_tables', 'borough_analysis.csv'))
+            self.temporal_df = pd.read_csv(os.path.join('analysis_tables', 'temporal_trends.csv'))
+            self.anomalies_df = pd.read_csv(os.path.join('analysis_tables', 'anomalies_detected.csv'))
+            self.property_df = pd.read_csv(os.path.join('analysis_tables', 'property_value_analysis.csv'))
+            self.violations_df = pd.read_csv(os.path.join('analysis_tables', 'violation_frequency.csv'))
+            self.analysis_df = pd.read_csv(os.path.join('analysis_tables', 'analysis_data.csv'))
             print("All analysis data loaded")
             return True
         except Exception as e:
