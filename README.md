@@ -21,7 +21,7 @@ Both datasets were accessed via the **NYC Open Data Socrata API**:
 Ensure requirements are met by installing packages in `requirements.txt`
 
 ### 2. Load the raw data (streaming pipeline)
-NYC Restaurant Inspection Results
+**NYC Restaurant Inspection Results**
 
 Run these two scripts at the same time, each in its own terminal/tab 
 
@@ -29,7 +29,7 @@ Run these two scripts at the same time, each in its own terminal/tab
 
 The producer streams the restaurant inspection API, and the consumer receives the stream and writes the records into a DuckDB file, inspections.db. 
 
-NYC Primary Land Use Tax Lot Output (PLUTO)
+**NYC Primary Land Use Tax Lot Output (PLUTO)**
 
 Run these two scripts at the same time, each in its own terminal/tab 
 
