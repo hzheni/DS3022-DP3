@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.patches import Rectangle
 import logging
+import os
+
+PLOTS_DIR = "plots"
+os.makedirs(PLOTS_DIR, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -82,7 +86,7 @@ class InsightGenerator:
             ax.grid(axis='x', alpha=0.3)
             
             plt.tight_layout()
-            plt.savefig('plot_1_cuisine_performance.png', dpi=300, bbox_inches='tight')
+            plt.savefig(os.path.join(PLOTS_DIR, 'plot_1_cuisine_performance.png'), dpi=300, bbox_inches='tight')
             print("Saved: plot_1_cuisine_performance.png")
             plt.close()
             
@@ -148,7 +152,7 @@ class InsightGenerator:
             
             plt.suptitle('NYC Borough Safety Comparison', fontsize=16, fontweight='bold', y=0.995)
             plt.tight_layout()
-            plt.savefig('plot_2_borough_comparison.png', dpi=300, bbox_inches='tight')
+            plt.savefig(os.path.join(PLOTS_DIR, 'plot_2_borough_comparison.png'), dpi=300, bbox_inches='tight')
             print("Saved: plot_2_borough_comparison.png")
             plt.close()
             
@@ -207,7 +211,7 @@ class InsightGenerator:
             ax.grid(True, alpha=0.3)
             
             plt.tight_layout()
-            plt.savefig('plot_3_temporal_trends.png', dpi=300, bbox_inches='tight')
+            plt.savefig(os.path.join(PLOTS_DIR, 'plot_3_temporal_trends.png'), dpi=300, bbox_inches='tight')
             print("Saved: plot_3_temporal_trends.png")
             plt.close()
             
@@ -277,7 +281,7 @@ class InsightGenerator:
             plt.suptitle('Property Value Impact on Restaurant Safety', 
                         fontsize=14, fontweight='bold')
             plt.tight_layout()
-            plt.savefig('plot_4_property_value_impact.png', dpi=300, bbox_inches='tight')
+            plt.savefig(os.path.join(PLOTS_DIR, 'plot_4_property_value_impact.png'), dpi=300, bbox_inches='tight')
             print("Saved: plot_4_property_value_impact.png")
             plt.close()
             
@@ -317,7 +321,7 @@ class InsightGenerator:
             ax.grid(axis='x', alpha=0.3)
             
             plt.tight_layout()
-            plt.savefig('plot_5_top_violations.png', dpi=300, bbox_inches='tight')
+            plt.savefig(os.path.join(PLOTS_DIR, 'plot_5_top_violations.png'), dpi=300, bbox_inches='tight')
             print("Saved: plot_5_top_violations.png")
             plt.close()
             
