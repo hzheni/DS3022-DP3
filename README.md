@@ -44,4 +44,4 @@ Run `prep_data.py` to join both DuckDB tables based on `BBL` (Bourough-Block-Lot
 Run `analysis.py` to clean the data, create analysis tables, and export cleaned datasets to csv for visualization.
 
 ### 5. Visualization
-
+Run `visualization.py` to generate key findings and plots.
