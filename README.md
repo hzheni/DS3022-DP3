@@ -22,10 +22,19 @@ Ensure requirements are met by installing packages in `requirements.txt`
 
 ### 2. Load the raw data (streaming pipeline)
 NYC Restaurant Inspection Results
-Run these two scripts at the same time, each in its own terminal/tab `producer_inspections.py` and `consumer_inspections.py` 
+
+Run these two scripts at the same time, each in its own terminal/tab 
+
+`producer_inspections.py` and `consumer_inspections.py` 
+
 The producer streams the restaurant inspection API, and the consumer receives the stream and writes the records into a DuckDB file, inspections.db. 
+
 NYC Primary Land Use Tax Lot Output (PLUTO)
-Run these two scripts at the same time, each in its own terminal/tab `producer_pluto.py` and `consumer_pluto.py` 
+
+Run these two scripts at the same time, each in its own terminal/tab 
+
+`producer_pluto.py` and `consumer_pluto.py` 
+
 The producer streams the building characteristics API, and the consumer receives the stream and writes the records into the same DuckDB file, under a different table. 
 
 ### 3. Join two datasets
