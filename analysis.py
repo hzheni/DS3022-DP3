@@ -6,6 +6,10 @@ import numpy as np
 import logging
 from datetime import datetime, timedelta
 import json
+import os
+
+ANALYSIS_DIR = "analysis_tables"
+os.makedirs(ANALYSIS_DIR, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -235,7 +239,7 @@ class InspectionAnalyzer:
             
             # the main analysis dataset
             df = self.conn.execute("SELECT * FROM analysis_data").df()
-            df.to_csv("analysis_data.csv", index=False)
+            df.to_csv(os.path.join(ANALYSIS_DIR, "analysis_data.csv"), index=False)
             print(f"  ✓ Exported analysis_data.csv ({len(df):,} rows)")
             
             return df
@@ -517,17 +521,17 @@ class InspectionAnalyzer:
             
             # exporting results
             if cuisine_df is not None:
-                cuisine_df.to_csv("cuisine_analysis.csv", index=False)
+                cuisine_df.to_csv(os.path.join(ANALYSIS_DIR, "cuisine_analysis.csv"), index=False)
             if borough_df is not None:
-                borough_df.to_csv("borough_analysis.csv", index=False)
+                borough_df.to_csv(os.path.join(ANALYSIS_DIR, "borough_analysis.csv"), index=False)
             if temporal_df is not None:
-                temporal_df.to_csv("temporal_trends.csv", index=False)
+                temporal_df.to_csv(os.path.join(ANALYSIS_DIR, "temporal_trends.csv"), index=False)
             if anomalies_df is not None:
-                anomalies_df.to_csv("anomalies_detected.csv", index=False)
+                anomalies_df.to_csv(os.path.join(ANALYSIS_DIR, "anomalies_detected.csv"), index=False)
             if property_df is not None:
-                property_df.to_csv("property_value_analysis.csv", index=False)
+                property_df.to_csv(os.path.join(ANALYSIS_DIR, "property_value_analysis.csv"), index=False)
             if violations_df is not None:
-                violations_df.to_csv("violation_frequency.csv", index=False)
+                violations_df.to_csv(os.path.join(ANALYSIS_DIR, "violation_frequency.csv"), index=False)
             
             print("\n" + "="*60)
             print("ANALYSIS COMPLETE - all results have been exported to CSV files")
