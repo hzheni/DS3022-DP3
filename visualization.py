@@ -7,6 +7,7 @@ import seaborn as sns
 from matplotlib.patches import Rectangle
 import logging
 import os
+import textwrap
 
 PLOTS_DIR = "plots"
 os.makedirs(PLOTS_DIR, exist_ok=True)
@@ -304,10 +305,14 @@ class InsightGenerator:
             bars = ax.barh(range(len(top_violations)), top_violations['frequency'], 
                           color=plt.cm.Spectral(np.linspace(0, 1, len(top_violations))))
             
+            wrapped_labels = [
+                f"{i+1}. " + "\n   ".join(textwrap.wrap(v, width=50))
+                for i, v in enumerate(top_violations['violation_category'])
+            ]
+
             ax.set_yticks(range(len(top_violations)))
-            labels = [f"{i+1}. {v[:70]}..." if len(v) > 70 else f"{i+1}. {v}" 
-                     for i, v in enumerate(top_violations['violation_category'])]
-            ax.set_yticklabels(labels, fontsize=10)
+            ax.set_yticklabels(wrapped_labels, fontsize=10)
+            
             ax.set_xlabel('Number of Violations Cited', fontweight='bold')
             ax.set_title('Top 10 Most Common Violations in NYC Restaurants\n(Systemic Food Safety Issues)', 
                         fontweight='bold', fontsize=13, pad=20)
