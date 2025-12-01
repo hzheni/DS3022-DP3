@@ -92,8 +92,8 @@ class InspectionAnalyzer:
                     LOWER(TRIM(cuisine_description)) as cuisine_description,
                     inspection_date,
                     CASE 
-                        WHEN critical_flag = 'Y' THEN 1 
-                        WHEN critical_flag = 'N' THEN 0 
+                        WHEN critical_flag = 'Critical' THEN 1 
+                        WHEN critical_flag = 'Not Critical' THEN 0 
                         ELSE NULL 
                     END as is_critical,
                     CASE 
